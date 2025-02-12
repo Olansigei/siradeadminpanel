@@ -1,0 +1,127 @@
+<header class="header">
+  <div class="header-left">
+    <button class="menu-toggle" (click)="toggleSidebar()">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="brand">
+      <h1>SIRADE</h1>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="header-search">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Buscar...">
+    </div>
+    <div class="header-notifications">
+      <button class="notification-btn">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge">3</span>
+      </button>
+    </div>
+    <div class="user-info">
+      <div class="user-details">
+        <span class="user-name">Alan de Jesús</span>
+        <span class="user-role">Administrador</span>
+      </div>
+      <i class="fas fa-chevron-down"></i>
+    </div>
+  </div>
+</header>
+
+<!-- Main Content -->
+<div class="main-container">
+  <!-- Sidebar -->
+  <nav class="sidebar" [class.collapsed]="isSidebarCollapsed">
+    <div class="sidebar-content">
+      <div class="sidebar-header">
+        <span>Menú Principal</span>
+      </div>
+
+      <ul class="sidebar-menu">
+        <ng-container *ngFor="let item of menuItems">
+          <!-- Section Header -->
+          <li *ngIf="item.isSection" class="menu-section">
+            <span>{{ item.label }}</span>
+          </li>
+
+          <!-- Menu Item -->
+          <li *ngIf="!item.isSection"
+              class="menu-item"
+              [class.active]="selectedMenuItem === item.id"
+              [class.has-submenu]="item.submenu">
+
+            <a (click)="item.submenu ? toggleSubmenu(item) : selectMenuItem(item.id)"
+               class="menu-link">
+              <i [class]="item.icon"></i>
+              <span>{{ item.label }}</span>
+              <ng-container *ngIf="item.badge">
+                <span class="menu-badge">{{ item.badge }}</span>
+              </ng-container>
+              <i *ngIf="item.submenu"
+                 class="fas"
+                 [class.fa-chevron-down]="!item.isExpanded"
+                 [class.fa-chevron-up]="item.isExpanded"></i>
+            </a>
+
+            <!-- Submenu -->
+            <ul *ngIf="item.submenu"
+                class="submenu"
+                [@slideInOut]="item.isExpanded ? 'expanded' : 'collapsed'">
+              <li *ngFor="let subItem of item.submenu">
+                <a (click)="selectMenuItem(subItem.id)"
+                   [routerLink]="['/'+subItem.label.toLowerCase()]"
+                   routerLinkActive="active">
+                  <i [class]="subItem.icon"></i>
+                  <span>{{ subItem.label }}</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+  </nav>
+  <main class="main-content">
+
+    <section class="content">
+      <h1>Doctores Registrados</h1>
+      <button class="add-doctor-btn">Agregar Doctor</button>
+      <table class="doctor-table">
+        <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Cargo</th>
+          <th>Hospital</th>
+          <th>Coordinador</th>
+          <th>Fecha</th>
+          <th>Opciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>DMG Dra. María González</td>
+          <td>Neumóloga</td>
+          <td>Hospital Central</td>
+          <td>Alan de Jesús</td>
+          <td>15 Ene 2024</td>
+          <td>
+            <button class="edit-btn">✎</button>
+            <button class="delete-btn">🗑</button>
+          </td>
+        </tr>
+        <tr>
+          <td>DCR Dr. Carlos Ruiz</td>
+          <td>Cardiólogo</td>
+          <td>Hospital Norte</td>
+          <td>Alan de Jesús</td>
+          <td>12 Ene 2024</td>
+          <td>
+            <button class="edit-btn">✎</button>
+            <button class="delete-btn">🗑</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
